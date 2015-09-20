@@ -1,0 +1,12 @@
+YayPonies Torrent Creator/Uploader v2
+-------------------------------------
+YP tools are provided as it is, there might or might not
+be a README, there might or might not be a licences,
+we warranty absolutely nothing, it does work for us.
+-------------------------------------
+
+torrents-editme is provided for convenience,
+it will need editing before being functionnal.
+
+This doesn't work under Python for Windows,
+You will need a linux machine, or Cygwin!

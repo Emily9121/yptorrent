@@ -1,0 +1,47 @@
+clear
+echo "Mounting network drive if required"
+net use z: \\\\192.168.***.***\\**** password /user:user
+echo "Launching Torrent Creation Wizard"
+clear
+echo "--------------------- "
+echo "YP Torrent Creator 0.2"
+echo "--------------------- "
+echo "Here some folder your pony could be in:"
+echo "*/"
+echo "Pony folder? (Without filename, please include the last /):"
+read folder
+echo "Pony filename? (Without folder):"
+read filename
+echo "Here a list of most used format (Replace ENG SUB by Temp for T files):"
+echo " "
+echo "1080P TVRip / H264 / AAC Japanese / YayPonies"
+echo "1080P RAW / AC3 5.1 / AAC 2.0 / ENG SUB"
+echo "1080P CC / AC3 5.1 / AAC 2.0 / ZR"
+echo "1080P RAW / AC3 5.1 / AAC 2.0 / AUSTRALIA"
+echo "1080P TVRip / MLP:FIM / Spazz"
+echo "720P RAW / AC3 5.1 / AAC 2.0 / ENG SUB"
+echo "720P CC / AC3 5.1 / AAC 2.0 / ZR"
+echo "720P RAW / AC3 5.1 / AAC 2.0 / AUSTRALIA"
+echo "720P Low Quality / AAC 2.0 / YayPonies"
+echo "720P Low Quality CC / AAC 2.0 / YayPonies / CC by ZR"
+echo " "
+echo "Books (contain unique issue number, can't be copy/pasted)"
+echo "(Micro Series) COMIC #Number / File format / YayPonies"
+echo " "
+echo "Comment:"
+read comment
+mktorrent -a http://exodus.desync.com/announce -a http://exodus.desync.com:6969/announce -a http://i.bandito.org/announce -a http://pow7.com/announce -a  udp://open.demonii.com:1337 -a udp://tracker.coppersurfer.tk:6969 -a udp://tracker.leechers-paradise.org:6969 -a udp://tracker.opentrackr.org:1337/announce -a udp://tracker.pomf.se -a udp://tracker.blackunicorn.xyz:6969 -c "$comment" "/cygdrive/z/$folder$filename"
+echo "----"
+echo "Uploading torrent"
+echo " "
+mkdir $filename
+mv $filename.torrent $filename
+python yptorrentup.py -f $filename -o $filename/uploader.txt
+mv $filename/$filename.torrent /cygdrive/z/torrents/
+cat $filename/uploader.txt
+echo "-----------"
+echo "Sending to seedbox"
+ssh torrent@192.168.*.*** sudo fixperm
+ssh torrent@192.168.*.*** ln -s /srv/http/$folder$filename ..*/torrents/downloads/
+ssh torrent@192.168.*.*** cp /srv/http/torrents/$filename.torrent ..*/torrents/.torrents/_watch/
+echo "Everything should be OK"
